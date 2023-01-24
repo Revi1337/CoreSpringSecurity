@@ -15,6 +15,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    /**
+     * <p> The following paths are unconditionally inspected by SecurityFilter
+     * <p> Refer : {@link org.springframework.security.web.access.intercept.FilterSecurityInterceptor} </p>
+     * @param httpSecurity
+     * @return
+     * @throws Exception
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -31,6 +38,8 @@ public class SecurityConfig {
     }
 
     /**
+     * <p> The paths below are filtered before the SecurityFilter. So paths below do not go through the SecurityFilter
+     * <p> Refer : {@link org.springframework.security.web.access.intercept.FilterSecurityInterceptor} </p>
      * <p> Exclude In Spring Security Control. (Contains Static Resources)
      * <p> Ex) css, images, js , etc..
      * @return  {@link WebSecurity}.
@@ -52,8 +61,8 @@ public class SecurityConfig {
         String password = passwordEncoder().encode("1111");
         return new InMemoryUserDetailsManager(
                 User.withUsername("user").password(password).roles("USER").build(),
-                User.withUsername("manager").password(password).roles("MANAGER").build(),
-                User.withUsername("admin").password(password).roles("ADMIN").build()
+                User.withUsername("manager").password(password).roles("USER", "MANAGER").build(),
+                User.withUsername("admin").password(password).roles("USER", "MANAGER", "ADMIN").build()
         );
     }
 
