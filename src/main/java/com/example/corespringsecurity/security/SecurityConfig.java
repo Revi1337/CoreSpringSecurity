@@ -26,7 +26,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .mvcMatchers("/").permitAll()
+                        .mvcMatchers("/", "/users").permitAll()
                         .mvcMatchers("/mypage").hasRole("USER")
                         .mvcMatchers("/messages").hasRole("MANAGER")
                         .mvcMatchers("/config").hasRole("ADMIN")
