@@ -1,14 +1,36 @@
 package com.example.corespringsecurity.controller.login;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class LoginController {
 
-    @GetMapping("/login")
+    @GetMapping(value = "/login")
     public String login() {
         return "user/login/login";
+    }
+
+    /**
+     * <p>In Spring Security there's two ways to log out.</p>
+     * <p>First, use form tag and Request POST method</p>
+     * <p>Second, use a tag and Request GET method -> use {@link SecurityContextLogoutHandler}</p>
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @return
+     */
+    @GetMapping(value = "/logout")
+    public String logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null)
+            new SecurityContextLogoutHandler().logout(httpServletRequest, httpServletResponse, authentication);
+        return "redirect:/login";
     }
 
 }
