@@ -1,12 +1,8 @@
 package com.example.corespringsecurity.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -31,8 +27,11 @@ public class SecurityConfig {
                         .mvcMatchers("/messages").hasRole("MANAGER")
                         .mvcMatchers("/config").hasRole("ADMIN")
                         .anyRequest().authenticated())
-                .formLogin()
-                .and()
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/")
+                        .loginProcessingUrl("/login_proc")
+                        .permitAll())
                 .build();
     }
 
@@ -42,6 +41,7 @@ public class SecurityConfig {
                 .ignoring()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
+}
 
 //    private final CustomUserDetailsService customUserDetailsService;
 //    /**
@@ -53,4 +53,3 @@ public class SecurityConfig {
 //        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 //        daoAuthenticationProvider.setUserDetailsService(customUserDetailsService);
 //    }
-}
