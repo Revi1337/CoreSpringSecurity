@@ -13,6 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final FormWebAuthenticationDetailsSource formWebAuthenticationDetailsSource;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -31,6 +33,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .defaultSuccessUrl("/")
                         .loginProcessingUrl("/login_proc")
+                        .authenticationDetailsSource(formWebAuthenticationDetailsSource)
                         .permitAll())
                 .build();
     }
