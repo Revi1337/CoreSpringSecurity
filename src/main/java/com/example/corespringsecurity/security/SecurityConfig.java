@@ -13,6 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
     private final FormWebAuthenticationDetailsSource formWebAuthenticationDetailsSource;
 
     @Bean
@@ -34,6 +36,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/")
                         .loginProcessingUrl("/login_proc")
                         .authenticationDetailsSource(formWebAuthenticationDetailsSource)
+                        .successHandler(customAuthenticationSuccessHandler)
                         .permitAll())
                 .build();
     }
