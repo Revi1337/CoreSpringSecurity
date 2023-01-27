@@ -13,6 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     private final FormWebAuthenticationDetailsSource formWebAuthenticationDetailsSource;
@@ -26,7 +28,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .mvcMatchers("/", "/users", "user/login/**").permitAll()
+                        .mvcMatchers("/", "/users", "user/login/**", "/login*").permitAll()
                         .mvcMatchers("/mypage").hasRole("USER")
                         .mvcMatchers("/messages").hasRole("MANAGER")
                         .mvcMatchers("/config").hasRole("ADMIN")
@@ -37,6 +39,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login_proc")
                         .authenticationDetailsSource(formWebAuthenticationDetailsSource)
                         .successHandler(customAuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
                         .permitAll())
                 .build();
     }
