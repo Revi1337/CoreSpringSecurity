@@ -1,4 +1,4 @@
-package com.example.corespringsecurity.security;
+package com.example.corespringsecurity.security.handler;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;

@@ -1,5 +1,7 @@
-package com.example.corespringsecurity.security;
+package com.example.corespringsecurity.security.provider;
 
+import com.example.corespringsecurity.security.service.AccountContext;
+import com.example.corespringsecurity.security.common.FormWebAuthenticationDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

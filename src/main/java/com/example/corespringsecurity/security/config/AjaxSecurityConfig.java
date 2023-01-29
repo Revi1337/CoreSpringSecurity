@@ -1,5 +1,6 @@
-package com.example.corespringsecurity.security;
+package com.example.corespringsecurity.security.config;
 
+import com.example.corespringsecurity.security.provider.AjaxAuthenticationProvider;
 import com.example.corespringsecurity.security.filter.AjaxLoginProcessingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

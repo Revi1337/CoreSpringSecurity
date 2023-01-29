@@ -1,4 +1,4 @@
-package com.example.corespringsecurity.security;
+package com.example.corespringsecurity.security.handler;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

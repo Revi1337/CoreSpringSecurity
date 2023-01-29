@@ -1,5 +1,9 @@
-package com.example.corespringsecurity.security;
+package com.example.corespringsecurity.security.config;
 
+import com.example.corespringsecurity.security.handler.CustomAccessDeniedHandler;
+import com.example.corespringsecurity.security.handler.CustomAuthenticationFailureHandler;
+import com.example.corespringsecurity.security.handler.CustomAuthenticationSuccessHandler;
+import com.example.corespringsecurity.security.common.FormWebAuthenticationDetailsSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

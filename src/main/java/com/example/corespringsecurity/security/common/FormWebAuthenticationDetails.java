@@ -1,4 +1,4 @@
-package com.example.corespringsecurity.security;
+package com.example.corespringsecurity.security.common;
 
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import javax.servlet.http.HttpServletRequest;
