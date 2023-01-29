@@ -1,5 +1,7 @@
 package com.example.corespringsecurity.security.config;
 
+import com.example.corespringsecurity.security.common.AjaxLoginAuthenticationEntryPoint;
+import com.example.corespringsecurity.security.handler.AjaxAccessDeniedHandler;
 import com.example.corespringsecurity.security.handler.AjaxAuthenticationFailureHandler;
 import com.example.corespringsecurity.security.handler.AjaxAuthenticationSuccessHandler;
 import com.example.corespringsecurity.security.provider.AjaxAuthenticationProvider;
@@ -13,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -51,11 +54,21 @@ public class AjaxSecurityConfig {
     }
 
     @Bean
+    public AccessDeniedHandler ajaxAccessDeniedHandler() {
+        return new AjaxAccessDeniedHandler();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .antMatcher("/api/**")
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .mvcMatcher("/api/**") // 해당 SecurityFilterChain 은  /api 하위인 경로에만 실행되도록 설정
+                .authorizeHttpRequests(auth -> auth
+                        .mvcMatchers("/api/messages").hasRole("MANAGER")
+                        .anyRequest().authenticated())
                 .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(new AjaxLoginAuthenticationEntryPoint())
+                        .accessDeniedHandler(ajaxAccessDeniedHandler()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
