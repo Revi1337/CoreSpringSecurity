@@ -1,23 +1,21 @@
 package com.example.corespringsecurity.security;
 
-import com.example.corespringsecurity.security.filter.AjaxLoginProcessingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity @RequiredArgsConstructor
+@Order(1)
+@EnableWebSecurity @Configuration @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
@@ -38,21 +36,32 @@ public class SecurityConfig {
         return customAccessDeniedHandler;
     }
 
-    @Bean
-    public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() {
-        AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
-        ajaxLoginProcessingFilter.setAuthenticationManager(new ProviderManager(new DaoAuthenticationProvider()));
-        return ajaxLoginProcessingFilter;
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager() {
+//        return new ProviderManager(ajaxAuthenticationProvider());
+//    }
+//
+//    @Bean
+//    public AjaxAuthenticationProvider ajaxAuthenticationProvider(){
+//        return new AjaxAuthenticationProvider();
+//    }
+//
+//    @Bean
+//    public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() {
+//        AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
+//        ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManager());
+//        return ajaxLoginProcessingFilter;
+//    }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain1(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests(auth -> auth
-                        .mvcMatchers("/", "/users", "user/login/**", "/login*").permitAll()
+//                        .mvcMatchers("/", "/users", "user/login/**", "/login*").permitAll()
                         .mvcMatchers("/mypage").hasRole("USER")
                         .mvcMatchers("/messages").hasRole("MANAGER")
                         .mvcMatchers("/config").hasRole("ADMIN")
+                        .mvcMatchers("/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -66,8 +75,8 @@ public class SecurityConfig {
                         .accessDeniedHandler(customAccessDeniedHandler())
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
                         .accessDeniedPage("/denied"))
-                .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
-                .csrf(AbstractHttpConfigurer::disable)
+//                .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+//                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 
@@ -78,9 +87,6 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }
-
-
-
 
 //    private final CustomUserDetailsService customUserDetailsService;
 //    @Bean
