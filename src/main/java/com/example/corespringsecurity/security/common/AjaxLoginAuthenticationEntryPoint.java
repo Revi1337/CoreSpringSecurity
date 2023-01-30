@@ -13,6 +13,6 @@ public class AjaxLoginAuthenticationEntryPoint implements AuthenticationEntryPoi
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, HttpStatus.UNAUTHORIZED.toString()); // 익명사용자라서 401 Unauthorized 를 내려줄것임.
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"); // 익명사용자라서 401 Unauthorized 를 내려줄것임.
     }
 }

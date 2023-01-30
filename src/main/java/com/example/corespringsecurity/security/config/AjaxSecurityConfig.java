@@ -65,12 +65,13 @@ public class AjaxSecurityConfig {
                 .mvcMatcher("/api/**") // 해당 SecurityFilterChain 은  /api 하위인 경로에만 실행되도록 설정
                 .authorizeHttpRequests(auth -> auth
                         .mvcMatchers("/api/messages").hasRole("MANAGER")
+                        .mvcMatchers("/api/login").permitAll()
                         .anyRequest().authenticated())
 //                .addFilterBefore(ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new AjaxLoginAuthenticationEntryPoint())
                         .accessDeniedHandler(ajaxAccessDeniedHandler()))
-                .csrf(AbstractHttpConfigurer::disable)
+//                .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
 
